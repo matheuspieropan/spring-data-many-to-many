@@ -35,7 +35,7 @@ Indica a coluna que representa a chave estrangeira da tabela Funcionario na tabe
 
 ------------
 
-# *Testando aplicação*
+# *Starter Config*
 
 Foi criada uma classe StarterConfig que foi anotada com @Configuration para ser gerenciada pelo Spring e também foi definido um @Bean que é invocado ao inicializar a aplicação.
 
