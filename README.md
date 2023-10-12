@@ -52,3 +52,23 @@ Vale ressaltar que esse código só funciona pois no mapeamento dos funcionarios
 # O que ela faz?
 
 Essa anoção faz com que o Spring Data persista primeiramente o funcionário para que então eu consiga salvar a empresa.  Se não houvesse essa anotação, teríamos que salvar primeiramente no banco de dados o usuário para depois salvarmos a empresa.
+
+# Testando aplicação
+
+Foi implementado dois endpoints na aplicação (ambos são GET)
+
+*1. /empresas* <- Tem como finalidade retornar apenas dados da empresa
+
+*2. /empresas/com-funcionarios* <- Tem como finalidade retornar a empresa e os funcionários associados a ela.
+
+O endpoint que retorna apenas as empresas não traz os dados do funcionário uma vez que o seu fetch é definido como LAZY ( default ). 
+
+Ou seja, ao usar o método findAll() do CrudRepository, ele por default irá trazer todos os atributos da empresa, porém a lista de  funcionários não será carregada automaticamente. A menos que seja explicitamente solicitado.
+
+------------
+
+Já o endpoint que retorna as empresas com os funcionários usa outra abordagem. No caso, temos uma implementação própria de como será feito o select.
+
+![image](https://github.com/matheuspieropan/spring-data-many-to-many/assets/56203846/46241432-7e15-4e7d-ac6f-1d509551d4ce)
+
+Como podemos ver acima, usamos o JOIN FETCH no atributo de funcionários para que o Spring ao trazer a lista de empresa, possa trazer também os seus funcionários.
