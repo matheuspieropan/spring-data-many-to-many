@@ -73,3 +73,23 @@ Já o endpoint que retorna as empresas com os funcionários usa outra abordagem.
 ![image](https://github.com/matheuspieropan/spring-data-many-to-many/assets/56203846/46241432-7e15-4e7d-ac6f-1d509551d4ce)
 
 Como podemos ver acima, usamos o JOIN FETCH no atributo de funcionários para que o Spring ao trazer a lista de empresa, possa trazer também os seus funcionários.
+
+------------
+
+# BÔNUS
+
+Na classe Empresa, utilizamos a anotação @JsonManagedReference acima do atributo funcionarios, enquanto na classe Funcionario aplicamos a anotação @JsonBackReference no atributo empresas.
+
+![image](https://github.com/matheuspieropan/spring-data-many-to-many/assets/56203846/3001ccae-fef8-449e-b9b6-d9f1471d5c3c)
+![image](https://github.com/matheuspieropan/spring-data-many-to-many/assets/56203846/e415e9c1-f2ba-43a8-8d90-a79e9e0ad632)
+
+Essas anotações têm como objetivo evitar uma possível exceção que poderia ocorrer em tempo de execução. 
+
+O problema ocorre ao consumir o endpoint que retorna as empresas com os funcionários. Nele, enfrentamos um problema conhecido como "loop infinito". A razão é que os funcionários possuem referências para as empresas, e, por sua vez, as empresas possuem referências para os funcionários, criando um ciclo interminável.
+
+As anotações @JsonManagedReference e @JsonBackReference são parte da lib Jackson, que é utilizada para a serialização e desserialização de objetos Java para JSON. Ao aplicar essas anotações, estamos indicando a Jackson como lidar com o ciclo de referências.
+
+-  *@JsonManagedReference:* Indica que a propriedade anotada é a parte que gerencia (ou inicia) a relação. No nosso caso, funcionarios na classe Empresa. Essa anotação ajuda o Jackson a identificar a parte "gerenciada" do relacionamento.
+
+- *@JsonBackReference:* Indica a parte "não gerenciada" do relacionamento. Na nossa situação, empresas na classe Funcionario. Esta anotação sinaliza para o Jackson que esta propriedade não deve ser serializada para evitar o loop infinito.
+
