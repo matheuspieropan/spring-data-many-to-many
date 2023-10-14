@@ -1,41 +1,32 @@
 package com.pieropan.springdatamanytomany.config;
 
-import com.pieropan.springdatamanytomany.entity.Empresa;
-import com.pieropan.springdatamanytomany.entity.Funcionario;
-import com.pieropan.springdatamanytomany.repository.EmpresaRepository;
+import com.pieropan.springdatamanytomany.entity.Conta;
+import com.pieropan.springdatamanytomany.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class StarterConfig {
 
     @Autowired
-    private EmpresaRepository empresaRepository;
+    private ContaRepository contaRepository;
 
     @Bean
     public void start() {
-        Iterable<Empresa> empresas = empresaRepository.findAll();
+        Iterable<Conta> contas = contaRepository.findAll();
 
-        if (!empresas.iterator().hasNext()) {
-            empresaRepository.save(criarEmpresa());
+        if (!contas.iterator().hasNext()) {
+            contaRepository.saveAll(criarContas());
         }
     }
 
-    private Funcionario criarFuncionario() {
-        return Funcionario.builder()
-                .cpf("001.112.223-32")
-                .nome("Matheus")
-                .build();
-    }
-
-    private Empresa criarEmpresa() {
-        return Empresa.builder()
-                .nome("SPAL INDUSTRIA BRASILEIRA DE BEBIDAS S/A - COCA COLA FEMSA")
-                .cnpj("61.186.888/0093-01")
-                .funcionarios(Collections.singletonList(criarFuncionario()))
-                .build();
+    private List<Conta> criarContas() {
+        return Arrays.asList(
+                Conta.builder().conta("102030").agencia("0001").saldo(500.00).build(),
+                Conta.builder().conta("405060").agencia("0002").saldo(1000.00).build());
     }
 }
